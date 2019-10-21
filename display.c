@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#define CYAN {100,255,255}
-#define AMBER {255,255,100}
+#define CYAN {100,200,255}
+#define AMBER {255,200,100}
 
 int main (int argc, char **argv) {
   SDL_Init(SDL_INIT_VIDEO);
@@ -16,18 +16,19 @@ int main (int argc, char **argv) {
 
   TTF_Font *font = TTF_OpenFont("dos.ttf", 16);
 
-  char lines[4][16] = {
+  unsigned char lines[5][16] = {
     " _N_  / ",
     "<_==== -=:",
     " |T|` \\ ",
-    " E E   "
+    " E E   ",
+    "\xb0\xb0\xb0\xb0\xb0\xb0\xb0"
   };
   
-  SDL_Color color = AMBER;
+  SDL_Color color = CYAN;
   SDL_Surface *text;
   SDL_Rect dst;
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 5; i++) {
     dst.y = i * 16;
     text = TTF_RenderText_Solid(font, lines[i], color);
     SDL_BlitSurface(text, NULL, screen, &dst);
