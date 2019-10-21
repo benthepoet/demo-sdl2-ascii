@@ -3,19 +3,50 @@
 
 #define CYAN {100,200,255}
 #define AMBER {255,200,100}
+#define BLACK {0,0,0}
 
-int main (int argc, char **argv) {
+#define WIN_TITLE "Demo"
+#define WIN_W 640
+#define WIN_H 480
+
+#define FONT_FILE "dos.ttf"
+#define FONT_W 9
+#define FONT_H 16
+
+SDL_Window *window;
+SDL_Surface *screen;
+TTF_Font *font;
+
+void initw() {
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_Window *window = SDL_CreateWindow("Demo", 0, 0, 640, 480, 0);
-  SDL_Surface *screen = SDL_GetWindowSurface(window);
-
-  SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-  SDL_UpdateWindowSurface(window);
+  window = SDL_CreateWindow(WIN_TITLE, 0, 0, WIN_W, WIN_H, 0);
+  screen = SDL_GetWindowSurface(window);
 
   TTF_Init();
+  font = TTF_OpenFont(FONT_FILE, FONT_H);
+}
 
-  TTF_Font *font = TTF_OpenFont("dos.ttf", 16);
+void clearw() {
+  SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+}
 
+void printw(int x, int y, char *str) {
+  SDL_Color color = CYAN;
+  SDL_Surface *text_surface = TTF_RenderText_Solid(font, str, color);
+  SDL_Rect dest = { x * FONT_W, y * FONT_H };
+  SDL_BlitSurface(text_surface, NULL, screen, &dest);
+  SDL_FreeSurface(text_surface);
+}
+
+void refreshw() {
+  SDL_UpdateWindowSurface(window);
+}
+
+int main (int argc, char **argv) {
+  initw();
+  clearw();
+  refreshw();
+  
   unsigned char lines[5][16] = {
     " _N_  / ",
     "<_==== -=:",
@@ -23,20 +54,15 @@ int main (int argc, char **argv) {
     " E E   ",
     "\xb0\xb0\xb0\xb0\xb0\xb0\xb0"
   };
-  
-  SDL_Color color = CYAN;
-  SDL_Surface *text;
-  SDL_Rect dst;
 
-  for (int i = 0; i < 5; i++) {
-    dst.y = i * 16;
-    text = TTF_RenderText_Solid(font, lines[i], color);
-    SDL_BlitSurface(text, NULL, screen, &dst);
-    SDL_FreeSurface(text);
+  for (int j = 0; j < 70; j++) {
+    clearw();
+    for (int i = 0; i < 5; i++) {
+      printw(j, i + 15, lines[i]);
+    }
+    refreshw();
+    SDL_Delay(80);
   }
- 
-  SDL_UpdateWindowSurface(window); 
-  SDL_Delay(5000);
   
   return 0;
 }
