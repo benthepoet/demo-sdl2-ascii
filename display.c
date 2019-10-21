@@ -16,10 +16,10 @@ int main (int argc, char **argv) {
 
   TTF_Font *font = TTF_OpenFont("dos.ttf", 16);
 
-  char lines[4][8] = {
-    " _N_   ",
-    "<_====",
-    " |T|`  ",
+  char lines[4][16] = {
+    " _N_  / ",
+    "<_==== -=:",
+    " |T|` \\ ",
     " E E   "
   };
   
