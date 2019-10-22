@@ -13,7 +13,7 @@
 #define FONT_W 9
 #define FONT_H 16
 
-#define TICKS_PER_SECOND 15
+#define TICKS_PER_SECOND 10
 #define SKIP_TICKS (1000 / TICKS_PER_SECOND)
 
 SDL_Window *window;
@@ -57,7 +57,7 @@ int main (int argc, char **argv) {
   Uint32 next_tick, sleep_ticks;
 
   SDL_Color color = CYAN;
-  SDL_Surface *text_surface = TTF_RenderText_Solid(font, "o", color);
+  SDL_Surface *text_surface = TTF_RenderText_Solid(font, "\xb0", color);
   texture = SDL_CreateTextureFromSurface(renderer, text_surface);
   SDL_FreeSurface(text_surface);
   
