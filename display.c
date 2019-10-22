@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <unistd.h>
 
 #define CYAN {100,200,255}
 #define AMBER {255,200,100}
@@ -12,6 +13,9 @@
 #define FONT_FILE "dos.ttf"
 #define FONT_W 9
 #define FONT_H 16
+
+#define TICKS_PER_SECOND 10
+#define SKIP_TICKS (1000 / TICKS_PER_SECOND)
 
 SDL_Window *window;
 SDL_Surface *screen;
@@ -42,6 +46,11 @@ void refreshw() {
   SDL_UpdateWindowSurface(window);
 }
 
+void exitw() {
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+}
+
 int main (int argc, char **argv) {
   initw();
   clearw();
@@ -55,13 +64,30 @@ int main (int argc, char **argv) {
     "\xb0\xb0\xb0\xb0\xb0\xb0\xb0"
   };
 
+  Uint32 next_tick, sleep_ticks;
+  SDL_Event event;
+  
   for (int j = 0; j < 70; j++) {
+    next_tick = SDL_GetTicks() + SKIP_TICKS;
+    
     clearw();
     for (int i = 0; i < 5; i++) {
       printw(j, i + 15, lines[i]);
     }
     refreshw();
-    SDL_Delay(80);
+
+    while (SDL_PollEvent(&event)) {
+      switch (event.type) {
+        case SDL_QUIT:
+	  return 0;
+	  break;
+      }
+    }
+
+    sleep_ticks = next_tick - SDL_GetTicks();
+    if (sleep_ticks >= 0) {
+      SDL_Delay(sleep_ticks);
+    }
   }
   
   return 0;
